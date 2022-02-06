@@ -8,7 +8,7 @@ export default class Labo1 extends Component {
 
   state = {
     gameBoard: [
-      [1, 0, 0],
+      [0, 0, 0],
       [0, 0, 0],
       [0, 0, 0]
     ],
