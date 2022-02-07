@@ -14,6 +14,7 @@ export default class Labo1 extends Component {
     ],
     currentPlayer: 1,
     round: 1,
+    disabled: false
   }
 
   // return 1 = p1 won, -1 = p2 won, 0 = draw
@@ -41,7 +42,6 @@ export default class Labo1 extends Component {
     sum = board[2][0] + board[1][1] + board[0][2];
     if (sum === 3) { return 1; }
     else if (sum === -3) { return -1; }
-
     // draw
     return 0;
   }
@@ -55,7 +55,8 @@ export default class Labo1 extends Component {
           [0, 0, 0]
         ],
       currentPlayer: 1,
-      round: 1
+      round: 1,
+      disabled: false
     });
   }
 
@@ -89,17 +90,17 @@ export default class Labo1 extends Component {
 
       //check if winner
       let winner = this.checkIfWin();
-      if (winner === 1) {
-        Alert.alert("Joueur 1 a gagné!");
-        this.resetGame();
-      } else if (winner === -1) {
-        Alert.alert("Joueur 2 a gagné!");
-        this.resetGame();
+      
+      if (winner === 1 || winner === -1) {
+        let w = winner === -1 ? 2 : 1
+        Alert.alert(`Joueur ${w} a gagné!`);
+        this.setState({ disabled: true })
       }
       //check if draw
       if (this.state.round === 9 && winner === 0) {
         Alert.alert("Match nul.");
-        this.resetGame();
+        this.setState({ disabled: true })
+        //this.resetGame();
       }
 
     }
@@ -108,43 +109,43 @@ export default class Labo1 extends Component {
     return (
       <View style={styles.container}>
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => this.onTilePress(0, 0)} style={[styles.tile, { borderLeftWidth: 0, borderTopWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 0)} style={[styles.tile, { borderLeftWidth: 0, borderTopWidth: 0 }]}>
             {this.setIcon(0, 0)}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => this.onTilePress(0, 1)} style={[styles.tile, { borderTopWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 1)} style={[styles.tile, { borderTopWidth: 0 }]}>
             {this.setIcon(0, 1)}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => this.onTilePress(0, 2)} style={[styles.tile, { borderTopWidth: 0, borderRightWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 2)} style={[styles.tile, { borderTopWidth: 0, borderRightWidth: 0 }]}>
             {this.setIcon(0, 2)}
           </TouchableOpacity>
         </View>
 
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => this.onTilePress(1, 0)} style={[styles.tile, { borderLeftWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 0)} style={[styles.tile, { borderLeftWidth: 0 }]}>
             {this.setIcon(1, 0)}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => this.onTilePress(1, 1)} style={styles.tile}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 1)} style={styles.tile}>
             {this.setIcon(1, 1)}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => this.onTilePress(1, 2)} style={[styles.tile, { borderRightWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 2)} style={[styles.tile, { borderRightWidth: 0 }]}>
             {this.setIcon(1, 2)}
           </TouchableOpacity>
         </View>
 
         <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity onPress={() => this.onTilePress(2, 0)} style={[styles.tile, { borderLeftWidth: 0, borderBottomWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 0)} style={[styles.tile, { borderLeftWidth: 0, borderBottomWidth: 0 }]}>
             {this.setIcon(2, 0)}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => this.onTilePress(2, 1)} style={[styles.tile, { borderBottomWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 1)} style={[styles.tile, { borderBottomWidth: 0 }]}>
             {this.setIcon(2, 1)}
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => this.onTilePress(2, 2)} style={[styles.tile, { borderBottomWidth: 0, borderRightWidth: 0 }]}>
+          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 2)} style={[styles.tile, { borderBottomWidth: 0, borderRightWidth: 0 }]}>
             {this.setIcon(2, 2)}
           </TouchableOpacity>
         </View>
@@ -184,11 +185,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 10,
     backgroundColor: '#006600',
-    marginTop:50,
+    marginTop: 50,
   },
   text: {
-    fontSize:20,
-    color:'white'
+    fontSize: 20,
+    color: 'white'
   }
 });
 
