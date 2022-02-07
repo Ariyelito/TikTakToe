@@ -161,7 +161,7 @@ export default class Labo1 extends Component {
           <Text>Joueur 1</Text>
           <TextInput
             placeholder="..."
-            style={{ backgroundColor: 'white', padding: 1, width: 100, textAlign: 'center' }}
+            style={{ backgroundColor: 'white', padding: 1, maxWidth:200, textAlign: 'center' }}
           />
           <Text>Joueur 2</Text>
           <TextInput
