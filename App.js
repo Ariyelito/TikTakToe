@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Pressable, Alert } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable, Alert, TextInput } from 'react-native';
 //import { render } from 'react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod';
 
 
@@ -14,7 +14,8 @@ export default class Labo1 extends Component {
     ],
     currentPlayer: 1,
     round: 1,
-    disabled: false
+    disabled: false,
+    isLoggedIn: true
   }
 
   // return 1 = p1 won, -1 = p2 won, 0 = draw
@@ -82,7 +83,7 @@ export default class Labo1 extends Component {
       // set correct tile
       let arr = this.state.gameBoard.slice();
       arr[row][col] = current;
-      this.setState({ gameBoard: arr })
+      this.setState({ gameBoard: arr });
 
       // switch player
       current = (current === 1) ? -1 : 1;
@@ -90,75 +91,89 @@ export default class Labo1 extends Component {
 
       //check if winner
       let winner = this.checkIfWin();
-      
+
       if (winner === 1 || winner === -1) {
         let w = winner === -1 ? 2 : 1
         Alert.alert(`Joueur ${w} a gagné!`);
-        this.setState({ disabled: true })
+        this.setState({ disabled: true });
       }
       //check if draw
       if (this.state.round === 9 && winner === 0) {
         Alert.alert("Match nul.");
-        this.setState({ disabled: true })
+        this.setState({ disabled: true });
         //this.resetGame();
       }
 
     }
   }
   render() {
-    return (
-      <View style={styles.container}>
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 0)} style={[styles.tile, { borderLeftWidth: 0, borderTopWidth: 0 }]}>
-            {this.setIcon(0, 0)}
-          </TouchableOpacity>
+    const isLoggedIn = this.state.isLoggedIn
+    if (!isLoggedIn) {
+      return (
+        <View style={styles.container}>
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 0)} style={[styles.tile, { borderLeftWidth: 0, borderTopWidth: 0 }]}>
+              {this.setIcon(0, 0)}
+            </TouchableOpacity>
 
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 1)} style={[styles.tile, { borderTopWidth: 0 }]}>
-            {this.setIcon(0, 1)}
-          </TouchableOpacity>
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 1)} style={[styles.tile, { borderTopWidth: 0 }]}>
+              {this.setIcon(0, 1)}
+            </TouchableOpacity>
 
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 2)} style={[styles.tile, { borderTopWidth: 0, borderRightWidth: 0 }]}>
-            {this.setIcon(0, 2)}
-          </TouchableOpacity>
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 2)} style={[styles.tile, { borderTopWidth: 0, borderRightWidth: 0 }]}>
+              {this.setIcon(0, 2)}
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 0)} style={[styles.tile, { borderLeftWidth: 0 }]}>
+              {this.setIcon(1, 0)}
+            </TouchableOpacity>
+
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 1)} style={styles.tile}>
+              {this.setIcon(1, 1)}
+            </TouchableOpacity>
+
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 2)} style={[styles.tile, { borderRightWidth: 0 }]}>
+              {this.setIcon(1, 2)}
+            </TouchableOpacity>
+          </View>
+
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 0)} style={[styles.tile, { borderLeftWidth: 0, borderBottomWidth: 0 }]}>
+              {this.setIcon(2, 0)}
+            </TouchableOpacity>
+
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 1)} style={[styles.tile, { borderBottomWidth: 0 }]}>
+              {this.setIcon(2, 1)}
+            </TouchableOpacity>
+
+            <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 2)} style={[styles.tile, { borderBottomWidth: 0, borderRightWidth: 0 }]}>
+              {this.setIcon(2, 2)}
+            </TouchableOpacity>
+          </View>
+          <Pressable onPress={() => this.resetGame()} style={styles.button}><Text style={styles.text}>Nouvelle partie</Text></Pressable>
         </View>
-
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 0)} style={[styles.tile, { borderLeftWidth: 0 }]}>
-            {this.setIcon(1, 0)}
-          </TouchableOpacity>
-
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 1)} style={styles.tile}>
-            {this.setIcon(1, 1)}
-          </TouchableOpacity>
-
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(1, 2)} style={[styles.tile, { borderRightWidth: 0 }]}>
-            {this.setIcon(1, 2)}
-          </TouchableOpacity>
+      );
+    } else {
+      return (
+        <View style={styles.container}>
+          <Text>Joueur 1</Text>
+          <TextInput
+            placeholder="..."
+            style={{ backgroundColor: 'white', padding: 1, width: 100, textAlign: 'center' }}
+          />
+          <Text>Joueur 2</Text>
+          <TextInput
+            placeholder="..."
+            style={{ backgroundColor: 'white', padding: 1, width: 100, textAlign: 'center' }}
+          />
+          <Pressable style={styles.button}><Text style={styles.text}>Confirmer</Text></Pressable>
         </View>
-
-        <View style={{ flexDirection: "row" }}>
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 0)} style={[styles.tile, { borderLeftWidth: 0, borderBottomWidth: 0 }]}>
-            {this.setIcon(2, 0)}
-          </TouchableOpacity>
-
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 1)} style={[styles.tile, { borderBottomWidth: 0 }]}>
-            {this.setIcon(2, 1)}
-          </TouchableOpacity>
-
-          <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(2, 2)} style={[styles.tile, { borderBottomWidth: 0, borderRightWidth: 0 }]}>
-            {this.setIcon(2, 2)}
-          </TouchableOpacity>
-        </View>
-
-        <Pressable onPress={() => this.resetGame()} style={styles.button}><Text style={styles.text}>Nouvelle partie</Text></Pressable>
-
-
-      </View>
-
-    );
+      );
+    }
   }
 }
-
 
 const styles = StyleSheet.create({
   container: {
