@@ -1,8 +1,6 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Pressable, Alert, TextInput } from 'react-native';
-//import { render } from 'react-native/Libraries/Renderer/implementations/ReactNativeRenderer-prod';
-
 
 export default class Labo1 extends Component {
 
@@ -83,7 +81,6 @@ export default class Labo1 extends Component {
         this.setState({ disabled: true });
         //this.resetGame();
       }
-
     }
   }
 
@@ -111,8 +108,6 @@ export default class Labo1 extends Component {
     });
   }
 
-
-
   gotUsernames = () => {
     let p1 = this.state.player1 != '' ? true : false;
     let p2 = this.state.player2 != '' ? true : false;
@@ -137,7 +132,6 @@ export default class Labo1 extends Component {
         <Text style={{ marginLeft: 'auto' }}>{display + ' (' + this.state.round + ')'}</Text>
         <Text style={[styles.player2, { marginLeft: 'auto' }]}>{this.state.player2}</Text>
       </View>
-
     </>
   }
 
@@ -233,10 +227,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 
-  topBar : {
+  topBar: {
     padding: 10,
-    borderBottomColor : 'grey',
-    borderBottomWidth : 1
+    borderBottomColor: 'grey',
+    borderBottomWidth: 1,
+    backgroundColor:'white'
   },
   player1: {
     color: '#006600',
@@ -271,6 +266,5 @@ const styles = StyleSheet.create({
     color: 'white'
   }
 });
-
 //export default Labo1
 //export default Flex;
