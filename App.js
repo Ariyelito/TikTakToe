@@ -322,7 +322,7 @@ const styles = StyleSheet.create({
   },
   textReset: {
     color: 'white',
-    marginTop:25,
+    marginTop: 25,
     borderRadius: 5,
     padding: 5,
     backgroundColor: '#AA0000',
