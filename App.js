@@ -12,13 +12,14 @@ export default class Labo1 extends Component {
     lastTile: [, ,],
     currentPlayer: 1,
     round: 1,
-    isLoggedIn: true,
-    player1: 'Orlando',
-    player2: 'Hakam',
+    isLoggedIn: false,
+    player1: '',
+    player2: '',
+    undone: false,
     //style
     disabled: false,
     gameWon: false,
-    undone: false,
+
   }
 
   resetGame = () => {
@@ -39,6 +40,8 @@ export default class Labo1 extends Component {
   newSession = () => {
     this.resetGame();
     this.setState({
+      player1: '',
+      player2: '',
       isLoggedIn: false,
     });
 
@@ -111,7 +114,7 @@ export default class Labo1 extends Component {
       arr[row][col] = current;
       this.setState({ gameBoard: arr });
       // enable undo
-      this.setState({undone:false})
+      this.setState({ undone: false })
       //check if winner
       let winner = this.checkWinCombi();
       if (!this.onWinOrDraw(winner)) {
@@ -142,7 +145,7 @@ export default class Labo1 extends Component {
       this.setState({ currentPlayer: player })
       let prevRound = this.state.round - 1;
       this.setState({ round: prevRound })
-      this.setState({undone:true})
+      this.setState({ undone: true })
     }
   }
 
@@ -220,7 +223,7 @@ export default class Labo1 extends Component {
           </View>
 
           <View style={styles.game}>
-            <Pressable disabled={this.state.disabled}  onPress={() => this.reverse()} style={{}}><Text style={{ color: 'black' }}>Undo</Text></Pressable>
+            <Pressable disabled={this.state.disabled} onPress={() => this.reverse()} style={{}}><Text style={{ color: 'black' }}>Undo</Text></Pressable>
 
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 0)} style={[styles.tile, { borderLeftWidth: 0, borderTopWidth: 0 }]}>
