@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Pressable, Alert, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Pressable, Alert, TextInput, Image } from 'react-native';
 
 export default class Labo1 extends Component {
   state = {
@@ -9,14 +9,16 @@ export default class Labo1 extends Component {
       [0, 0, 0],
       [0, 0, 0]
     ],
+    lastTile: [, ,],
     currentPlayer: 1,
     round: 1,
-    isLoggedIn: false,
-    player1: '',
-    player2: '',
+    isLoggedIn: true,
+    player1: 'Orlando',
+    player2: 'Hakam',
     //style
     disabled: false,
-    gameWon: false
+    gameWon: false,
+    undone: false,
   }
 
   resetGame = () => {
@@ -26,6 +28,7 @@ export default class Labo1 extends Component {
         [0, 0, 0],
         [0, 0, 0]
       ],
+      lastTile: [0, 0, 0],
       currentPlayer: 1,
       round: 1,
       disabled: false,
@@ -101,10 +104,14 @@ export default class Labo1 extends Component {
     if (tile === 0) {
       // get current player
       let current = this.state.currentPlayer
+      // save move (used to undo)
+      this.setState({ lastTile: [row, col, current] })
       // set correct tile
       let arr = this.state.gameBoard.slice();
       arr[row][col] = current;
       this.setState({ gameBoard: arr });
+      // enable undo
+      this.setState({undone:false})
       //check if winner
       let winner = this.checkWinCombi();
       if (!this.onWinOrDraw(winner)) {
@@ -114,11 +121,31 @@ export default class Labo1 extends Component {
         // switch player
         current = (current === 1) ? -1 : 1;
         this.setState({ currentPlayer: current });
+        // save board from last round
       }
+
 
     }
   }
-  // add winner cases
+
+  reverse = () => {
+    if (!this.state.undone) {
+      // get previous round variables
+      let row = this.state.lastTile[0]
+      let col = this.state.lastTile[1]
+      let player = this.state.lastTile[2]
+
+      // clear previous tile and restart round
+      let arr = this.state.gameBoard.slice();
+      arr[row][col] = 0;
+      this.setState({ gameBoard: arr });
+      this.setState({ currentPlayer: player })
+      let prevRound = this.state.round - 1;
+      this.setState({ round: prevRound })
+      this.setState({undone:true})
+    }
+  }
+
   // change display
   setIcon = (row, col) => {
     let value = this.state.gameBoard[row][col]
@@ -193,6 +220,8 @@ export default class Labo1 extends Component {
           </View>
 
           <View style={styles.game}>
+            <Pressable disabled={this.state.disabled}  onPress={() => this.reverse()} style={{}}><Text style={{ color: 'black' }}>Undo</Text></Pressable>
+
             <View style={{ flexDirection: "row" }}>
               <TouchableOpacity disabled={this.state.disabled} onPress={() => this.onTilePress(0, 0)} style={[styles.tile, { borderLeftWidth: 0, borderTopWidth: 0 }]}>
                 {this.setIcon(0, 0)}
@@ -236,6 +265,7 @@ export default class Labo1 extends Component {
             </View>
             <Pressable onPress={() => this.resetGame()} style={styles.button}><Text style={styles.text}>Nouvelle partie</Text></Pressable>
             <Pressable onPress={() => this.newSession()}><Text style={styles.textReset}>Quitter</Text></Pressable>
+
           </View>
 
         </View>
@@ -243,6 +273,7 @@ export default class Labo1 extends Component {
     } else {
       return (
         <View style={[styles.container, styles.game]}>
+          <Image style={styles.logo} source={require('./img/download.png')} />
           <Text style={{ color: 'black' }}>Joueur 1</Text>
           <TextInput
 
@@ -255,7 +286,7 @@ export default class Labo1 extends Component {
             placeholder="..." onChangeText={(value) => this.setState({ player2: value })}
             style={{ backgroundColor: 'white', padding: 1, minWidth: 150, textAlign: 'center', color: 'black' }}
           />
-          <Pressable onPress={() => this.gotUsernames()} style={styles.button}><Text style={styles.text}>Confirmer</Text></Pressable>
+          <Pressable onPress={() => this.gotUsernames()} style={styles.btnConfirmer}><Text style={styles.text}>Confirmer</Text></Pressable>
         </View>
       );
     }
@@ -316,6 +347,14 @@ const styles = StyleSheet.create({
     backgroundColor: '#006600',
     marginTop: 50,
   },
+
+  btnConfirmer: {
+    borderRadius: 5,
+    padding: 10,
+    backgroundColor: '#006600',
+    marginTop: 50,
+    marginBottom: 250
+  },
   text: {
     fontSize: 20,
     color: 'white'
@@ -326,6 +365,11 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     backgroundColor: '#AA0000',
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 30
   }
 });
 //export default Labo1
