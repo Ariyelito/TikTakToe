@@ -19,7 +19,6 @@ export default class Labo1 extends Component {
     //style
     disabled: false,
     gameWon: false,
-
   }
 
   resetGame = () => {
